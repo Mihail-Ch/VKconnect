@@ -10,19 +10,35 @@ import UIKit
 class MyGroupsController: UITableViewController {
     
     private let cellTypeNib = UINib(nibName: "TableViewCell", bundle: nil)
-    var myGroups = [Group]()
+    var myGroups = [GroupItems]()
+    lazy var vkApi = VKApi()
+    lazy var repository = Repository()
+    
+    
 
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        loadFromCache()
+        vkApi.getGroups {
+            [weak self] in
+            self?.loadFromCache()
+        }
        
         tableView.register(cellTypeNib, forCellReuseIdentifier: "TableViewCell")
     }
+    
+    private func loadFromCache() {
+        myGroups = repository.fetchGroups()
+        tableView.reloadData()
+    }
+    
 
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return myGroups.count
     }
    
 
@@ -35,10 +51,9 @@ class MyGroupsController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCell", for: indexPath) as! TableViewCell
         let group = myGroups[indexPath.row]
-        cell.configure(name: group.groupName, avatar: group.groupAvatar)
-       /* cell.name.text = group.groupName
-        cell.photo.image = UIImage(named: group.groupAvatar) */
-    
+        let url = URL(string: group.avatar)
+        cell.configure(name: group.name, avatar: url)
+       
         return cell
     }
     

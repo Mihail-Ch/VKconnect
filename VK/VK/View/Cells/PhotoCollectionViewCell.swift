@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class PhotoCollectionViewCell: UICollectionViewCell {
     
@@ -24,4 +25,8 @@ class PhotoCollectionViewCell: UICollectionViewCell {
                           animations: nil)
     }
     
+    
+    func configure(with photoUrl: URL?) {
+        self.photoCell.kf.setImage(with: photoUrl)
+    }
 }

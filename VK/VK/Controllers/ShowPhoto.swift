@@ -23,12 +23,7 @@ class ShowPhoto: UIViewController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        switch segue.identifier {
-        case "toShowPhoto":
-            
-        default:
-            <#code#>
-        }
+       
     }
     
 

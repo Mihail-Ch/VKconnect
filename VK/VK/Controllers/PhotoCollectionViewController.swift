@@ -8,24 +8,30 @@
 import UIKit
 
 
-protocol DataUpdateProtocol {
-    func onDataUpdate(data: String) 
-}
-
-class PhotoCollectionViewController: UICollectionViewController, DataUpdateProtocol {
-    func onDataUpdate(data: String) {
-        user = data
-        
-    }
+class PhotoCollectionViewController: UICollectionViewController {
     
+    var friendId: Int = 0
+    var userPhoto: [Photo]?
+    lazy var vkApi = VKApi()
+    lazy var repository = Repository()
     
-    var userPhoto = [String]()
-    var user: String = ""
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        loadFromCache()
+        vkApi.getFriendsPhoto(ownerId: friendId) {
+            [weak self] in
+            self?.loadFromCache()
+        }
 
+    }
+    
+    
+    private func loadFromCache() {
+        userPhoto = repository.fetchPhotos(ownerId: friendId)
+        collectionView?.reloadData()
     }
 
     
@@ -37,63 +43,27 @@ class PhotoCollectionViewController: UICollectionViewController, DataUpdateProto
 
    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-       
-       
+    
     }
     
-   
-    
-
     // MARK: UICollectionViewDataSource
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 1
+        return userPhoto!.count
     }
 
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of items
-        return userPhoto.count
+        return userPhoto!.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as? PhotoCollectionViewCell else { return UICollectionViewCell() }
-        let photo = userPhoto[indexPath.row]
-        cell.photoCell.image = UIImage(named: photo)
-        
+        let photo = userPhoto![indexPath.row]
+        let url = URL(string: photo.imageUrl)
+        cell.configure(with: url)
         return cell
     }
-
-    // MARK: UICollectionViewDelegate
-
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
-    
-    }
-    */
-
 }
+

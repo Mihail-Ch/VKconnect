@@ -10,8 +10,8 @@ import UIKit
 enum PostCellType: Int, CaseIterable {
     case author = 0
     case text
-   // case photo
-   // case likeCount
+    case photo
+    case likeCount
 }
 
 
@@ -19,9 +19,8 @@ class NewsTableViewController: UITableViewController {
     
     let vkApi = VKApi()
     let session = Session.shared
-    let news = [News(imageNews: "sun", nameNews: "Ipo", timeNews: "21:44", description: "Afskvbjhksgvkbvhjkvbsjkdvbjks lkjdshvjshvjsdnhjvk dsklvjklsdvklsdnvkldsnv dskljvklsdv"),
-                News(imageNews: "brain", nameNews: "GeekBrains", timeNews: "07:15", description: "knvjkahkjabvbk5456456453cdds 5456454sd 56456456456 sdfdssdfbhsdjgfew 44546565564 56564564555cdssd  dsvds ds"),
-                News(imageNews: "sun", nameNews: "Ipo", timeNews: "21:44", description: nil)
+    let news = [News(imageNews: "ng", nameNews: "National Giografic", timeNews: "21:44", description: "Вид хищных млекопитающих семейства кошачьих, один из пяти представителей рода пантера, который относится к подсемейству больших кошек. Слово «тигр» происходит от τίγρις, которое в свою очередь восходит к *tigri от корня «*taig» со значением «острый; быстрый", photoNews: "tiger"),
+                News(imageNews: "apple", nameNews: "Apple", timeNews: "07:15", description: "Мы создали самый мощный MacBook Pro в истории. И это монстр. Супербыстрые M1 Pro и M1 Max — первые чипы Apple, разработанные специально для профессионалов. Они дают феноменальную производительность и обеспечивают удивительно долгое время работы без подзарядки. Прибавьте к этому потрясающий дисплей Liquid Retina XDR, превосходную камеру и звук, а также больше портов для профессиональной работы. С этим ноутбуком всё становится возможным.", photoNews: "mac")
     ]
     
     
@@ -39,6 +38,8 @@ class NewsTableViewController: UITableViewController {
     private func setCell() {
         tableView.register(AvatarCell.nib, forCellReuseIdentifier: AvatarCell.reuseId)
         tableView.register(NewsDescriptionCell.nib, forCellReuseIdentifier: NewsDescriptionCell.reuseId)
+        tableView.register(ImageCell.nib, forCellReuseIdentifier: ImageCell.reuseId)
+        tableView.register(ControlCell.nib, forCellReuseIdentifier: ControlCell.reuseId)
     }
 
     // MARK: - Table view data source
@@ -69,6 +70,14 @@ class NewsTableViewController: UITableViewController {
             } else {
                break
             }
+            return cell
+        case .photo:
+            let cell = tableView.dequeueReusableCell(withIdentifier: ImageCell.reuseId, for: indexPath) as! ImageCell
+            cell.configure(photo: item.photoNews)
+            return cell
+        case .likeCount:
+            let cell = tableView.dequeueReusableCell(withIdentifier: ControlCell.reuseId, for: indexPath) as! ControlCell
+            cell.like
             return cell
         default:
             return UITableViewCell()

@@ -12,5 +12,6 @@ struct News {
     var imageNews: String
     var nameNews: String
     var timeNews: String
-    var description: String? 
+    var description: String?
+    var photoNews: String
 }

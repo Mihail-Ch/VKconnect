@@ -10,7 +10,7 @@ import UIKit
 class AvatarCell: UITableViewCell {
     
     static let nib = UINib(nibName: "AvatarCell", bundle: nil)
-    static let reuseId = "AvatarCellKey"//AvatarCellKey
+    static let reuseId = "AvatarCellKey"
     
     @IBOutlet weak var avatar: UIImageView!
     @IBOutlet weak var label: UILabel!
@@ -25,6 +25,11 @@ class AvatarCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
+        setupRoundView()
+    }
+    
+    private func setupRoundView() {
+        avatar.layer.cornerRadius = avatar.frame.height / 2
     }
     
     func configure(image: String, name: String, time: String) {

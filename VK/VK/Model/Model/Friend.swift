@@ -14,7 +14,7 @@ final class User: Object, Decodable {
     @objc dynamic var firstName: String
     @objc dynamic var lastName: String
     @objc dynamic var avatar: String
-   // @objc dynamic var owner: GroupItems?
+   
 
     
     

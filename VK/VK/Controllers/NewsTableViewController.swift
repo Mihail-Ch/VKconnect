@@ -20,7 +20,8 @@ class NewsTableViewController: UITableViewController {
     let vkApi = VKApi()
     let session = Session.shared
     let news = [News(imageNews: "ng", nameNews: "National Giografic", timeNews: "21:44", description: "Вид хищных млекопитающих семейства кошачьих, один из пяти представителей рода пантера, который относится к подсемейству больших кошек. Слово «тигр» происходит от τίγρις, которое в свою очередь восходит к *tigri от корня «*taig» со значением «острый; быстрый", photoNews: "tiger"),
-                News(imageNews: "apple", nameNews: "Apple", timeNews: "07:15", description: "Мы создали самый мощный MacBook Pro в истории. И это монстр. Супербыстрые M1 Pro и M1 Max — первые чипы Apple, разработанные специально для профессионалов. Они дают феноменальную производительность и обеспечивают удивительно долгое время работы без подзарядки. Прибавьте к этому потрясающий дисплей Liquid Retina XDR, превосходную камеру и звук, а также больше портов для профессиональной работы. С этим ноутбуком всё становится возможным.", photoNews: "mac")
+                News(imageNews: "apple", nameNews: "Apple", timeNews: "07:15", description: "Мы создали самый мощный MacBook Pro в истории. И это монстр. Супербыстрые M1 Pro и M1 Max — первые чипы Apple, разработанные специально для профессионалов. Они дают феноменальную производительность и обеспечивают удивительно долгое время работы без подзарядки. Прибавьте к этому потрясающий дисплей Liquid Retina XDR, превосходную камеру и звук, а также больше портов для профессиональной работы. С этим ноутбуком всё становится возможным.", photoNews: "mac"),
+                News(imageNews: "tiger", nameNews: "tiger", timeNews: "20:11", description: "hgsvdjksngklj", photoNews: nil)
     ]
     
     
@@ -73,7 +74,12 @@ class NewsTableViewController: UITableViewController {
             return cell
         case .photo:
             let cell = tableView.dequeueReusableCell(withIdentifier: ImageCell.reuseId, for: indexPath) as! ImageCell
-            cell.configure(photo: item.photoNews)
+            if let photo = item.photoNews {
+                cell.configure(photo: photo)
+            } else {
+                //MARK: - TO DO если ячейка пустая она не должна отоброжаться
+                
+            }
             return cell
         case .likeCount:
             let cell = tableView.dequeueReusableCell(withIdentifier: ControlCell.reuseId, for: indexPath) as! ControlCell

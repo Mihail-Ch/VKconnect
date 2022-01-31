@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class TableViewCell: UITableViewCell {
     
@@ -38,9 +39,9 @@ class TableViewCell: UITableViewCell {
         setupRoundView()
     }
 
-    func configure(name: String, avatar: String) {
+    func configure(name: String, avatar: URL?) {
         self.name.text = name
-        self.photo.image = UIImage(named: avatar)
+        self.photo.kf.setImage(with: avatar)
     }
     
     //MARK: - Animation and Layer

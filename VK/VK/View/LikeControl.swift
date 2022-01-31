@@ -28,7 +28,7 @@ class LikeControl: UIControl {
     private func setupView() {
         button.setImage(UIImage(named: "like"), for: .normal)
         button.addTarget(self, action: #selector(customButtonAction(_:)), for: .touchUpInside)
-        
+        button.contentMode = .scaleToFill
         likeLabel.text = "\(likeCount)"
         likeLabel.textColor = .black
         

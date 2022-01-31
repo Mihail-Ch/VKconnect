@@ -10,33 +10,10 @@ import UIKit
 class GroupsController: UITableViewController {
     
     private let cellTypeNib = UINib(nibName: "TableViewCell", bundle: nil)
-    var sections = [Section<Group>]()
-    var groups = [
-        Group(groupName: "Ivan", groupAvatar: "sun"),
-        Group(groupName: "An", groupAvatar: "logo"),
-        Group(groupName: "Mio", groupAvatar: "sun"),
-        Group(groupName: "Tony", groupAvatar: "sun"),
-        Group(groupName: "Sem", groupAvatar: "sun"),
-        Group(groupName: "Pivo", groupAvatar: "sun"),
-        Group(groupName: "Ivan", groupAvatar: "sun"),
-        Group(groupName: "An", groupAvatar: "logo"),
-        Group(groupName: "Mio", groupAvatar: "sun"),
-        Group(groupName: "Tony", groupAvatar: "sun"),
-        Group(groupName: "Sem", groupAvatar: "sun"),
-        Group(groupName: "Pivo", groupAvatar: "sun"),
-        Group(groupName: "Ivan", groupAvatar: "sun"),
-        Group(groupName: "An", groupAvatar: "logo"),
-        Group(groupName: "Mio", groupAvatar: "sun"),
-        Group(groupName: "Tony", groupAvatar: "sun"),
-        Group(groupName: "Sem", groupAvatar: "sun"),
-        Group(groupName: "Pivo", groupAvatar: "sun"),
-        Group(groupName: "Ivan", groupAvatar: "sun"),
-        Group(groupName: "An", groupAvatar: "logo"),
-        Group(groupName: "Mio", groupAvatar: "sun"),
-        Group(groupName: "Tony", groupAvatar: "sun"),
-        Group(groupName: "Sem", groupAvatar: "sun"),
-        Group(groupName: "Pivo", groupAvatar: "sun"),
-    ]
+    var sections = [Section<GroupItems>]()
+    var groups = [GroupItems]()
+    lazy var vkApi = VKApi()
+    
     
     @IBOutlet weak var searchBar: UISearchBar! {
         didSet {
@@ -44,15 +21,13 @@ class GroupsController: UITableViewController {
         }
     }
     
-
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(cellTypeNib, forCellReuseIdentifier: "TableViewCell")
         makeSortedSection()
-
-        
     }
-
+    
+    
     // MARK: - Table view data source
 
        override func numberOfSections(in tableView: UITableView) -> Int {
@@ -68,10 +43,9 @@ class GroupsController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCell", for: indexPath) as! TableViewCell
-        let group = sections[indexPath.section]
-        cell.configure(name: group.names[indexPath.row].groupName, avatar: group.names[indexPath.row].groupAvatar)
-      /*  cell.name.text = group.groupName
-        cell.photo.image = UIImage(named: group.groupAvatar) */
+        let group = sections[indexPath.section].names[indexPath.row]
+        let url = URL(string: group.avatar)
+        cell.configure(name: group.name, avatar: url)
         return cell
     }
     
@@ -79,7 +53,7 @@ class GroupsController: UITableViewController {
     
     func makeSortedSection() {
         let groupsDictionary = Dictionary.init(grouping: groups) {
-           $0.groupName.prefix(1)}
+           $0.name.prefix(1)}
         sections = groupsDictionary.map { Section(letter: String($0.key), names: $0.value) }
         sections.sort { $0.letter < $1.letter }
     }
@@ -132,8 +106,8 @@ class GroupsController: UITableViewController {
 extension GroupsController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        let groupsDictionary = Dictionary.init(grouping: groups.filter { (group) -> Bool in return searchText.isEmpty ? true : group.groupName.lowercased().contains(searchText.lowercased())
-        }) {$0.groupName.prefix(1)}
+        let groupsDictionary = Dictionary.init(grouping: groups.filter { (group) -> Bool in return searchText.isEmpty ? true : group.name.lowercased().contains(searchText.lowercased())
+        }) {$0.name.prefix(1)}
         sections = groupsDictionary.map { Section(letter: String($0.key), names: $0.value) }
         sections.sort { $0.letter < $1.letter }
         tableView.reloadData()
